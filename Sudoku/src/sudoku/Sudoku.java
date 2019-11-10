@@ -3,7 +3,6 @@
  */
 package sudoku;
 
-import java.util.Scanner;
 import java.util.Random;
 
 /**
@@ -21,7 +20,7 @@ public class Sudoku {
      *
      * @return
      */
-    private static int[][] sudokuGenerator() {
+    public static int[][] sudokuGenerator() {
         int numbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int aux, aux2;
         int sudoku[][] = new int[9][9];
@@ -280,7 +279,7 @@ public class Sudoku {
      * @param sudoku
      * @return 
      */
-    private static boolean checker(int i, int j, int num, int[][] sudoku){
+    public static boolean checker(int i, int j, int num, int[][] sudoku){
         boolean end;
         end = usedRow(i, num, sudoku);
         if(end == true){
@@ -301,7 +300,7 @@ public class Sudoku {
      * @param j
      * @return 
      */
-    private static boolean sudokuSolver9000(int[][] sudoku, int i, int j) {
+    public static boolean sudokuSolver9000(int[][] sudoku, int i, int j) {
         if (j >= 9 && i >= 9) {
             return true;
         }
@@ -313,11 +312,7 @@ public class Sudoku {
             return true;
         }
         if (sudoku[i][j] != 0) {
-            if(sudokuSolver9000(sudoku, i, j + 1)){
-                return true;
-            }else{
-                return false;
-            }
+            return(sudokuSolver9000(sudoku, i, j + 1));
         } else {
             for (int z = 1; z <= 9; z++) {
                 if (checker(i,j,z,sudoku)) {
@@ -333,57 +328,11 @@ public class Sudoku {
     }
 
     /**
-     * A lot of shit calling things and the user interface
-     * (just the console for now, someday will improve it)
+     * Just calls the user interface, located on another class
      * @param args
      */
     public static void main(String[] args) {
-        int input;
-        int sudoku[][] = new int[9][9];
-        boolean matrix = false;
-        Scanner obj = new Scanner(System.in);
-        System.out.println("Choose one number:");
-        System.out.println("1- Generate a new random sudoku");
-        System.out.println("2- Place the sudoku data");
-        input = obj.nextInt();
-        while (!matrix) {
-            switch (input) {
-                case 1:
-                    //Generate a random sudoku
-                    sudoku = sudokuGenerator();
-                    break;
-
-                case 2:
-                    //Wait input for sudoku and place instructions
-                    System.out.println("Instructions: If the value isn't"
-                            + " known place 0, "
-                            + "in other cases place the number");
-                    for (int i = 0; i < 9; i++) {
-                        for (int j = 0; j < 9; j++) {
-                            sudoku[i][j] = obj.nextInt();
-                        }
-                    }
-                    break;
-            }
-            System.out.println("Is this sudoku correct? (0 = No, 1 = Yes)");
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
-                    System.out.print(sudoku[i][j] + " ");
-                }
-                System.out.println();
-            }
-            if (obj.nextInt() == 1) {
-                matrix = true;
-            }
-        }
-        //Solve the sudoku and show the answer
-        sudokuSolver9000(sudoku, 0, 0);
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                System.out.print(sudoku[i][j] + " ");
-            }
-            System.out.println();
-        }
+        UI ui = new UI();
     }
 
 }
