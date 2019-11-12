@@ -84,6 +84,12 @@ public class Sudoku {
         sudoku_generated = sudoku;
         //Empty a max of EMPTY from the sudoku
         empt(sudoku);
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                System.out.print(sudoku[i][j]);
+            }
+            System.out.println();
+        }
         return sudoku;
     }
     /**
@@ -131,8 +137,8 @@ public class Sudoku {
         }
         //fill and check, then call recursive
         for (int z = 1; z <= 9; z++) {
-            sudoku[i][j] = z;
-            if (checkNumber(sudoku, i, j)) {
+            if (checker(i,j,z,sudoku)) {
+                sudoku[i][j] = z;
                 if (recursive_fill(sudoku, i, j + 1)) {
                     return true;
                 } else {
@@ -144,63 +150,6 @@ public class Sudoku {
         return false;
     }
 
-    /**
-     * Checks if the number put on X, Y is correct
-     * @param sudoku
-     * @param x
-     * @param y
-     * @return 
-     */
-    private static boolean checkNumber(int[][] sudoku, int x, int y) {
-        boolean right = true;
-        int square_x = 0;
-        int square_y = 0;
-        int aux = sudoku[x][y];
-        //Check lines and rows
-        for (int b = 0; ((b < 9) && (right == true)); b++) {
-            if (b == y) {
-                if (sudoku[b][y] == aux) {
-                    right = false;
-                }
-            } else if (b == x) {
-                if (sudoku[x][b] == aux) {
-                    right = false;
-                }
-            } else if ((sudoku[x][b] == aux) || (sudoku[b][y] == aux)) {
-                right = false;
-            }
-        }
-        //Check same square
-        //Find where X falls
-        if (x < 3) {
-            square_x = 0;
-        } else if (x < 6) {
-            square_x = 3;
-        } else if (x < 9) {
-            square_x = 6;
-        }
-        //Find where Y falls
-        if (y < 3) {
-            square_y = 0;
-        } else if (y < 6) {
-            square_y = 3;
-        } else if (y < 9) {
-            square_y = 6;
-        }
-
-        //Check squares
-        for (int i = 0; i < 3 && right == true; i++) {
-            for (int j = 0; j < 3 && right == true; j++) {
-                if ((i + square_x) != x && (j + square_y) != y) {
-                    if (sudoku[i + square_x][j + square_y] == aux) {
-                        right = false;
-                    }
-                }
-            }
-        }
-        return right;
-    }
-    
     /**
      * Checks if the number will fit correctly on a row
      * @param i
@@ -280,15 +229,14 @@ public class Sudoku {
      * @return 
      */
     public static boolean checker(int i, int j, int num, int[][] sudoku){
-        boolean end;
-        end = usedRow(i, num, sudoku);
-        if(end == true){
-            end = usedCol(j, num, sudoku);
-            if(end == true){
-                end = checkSquare(i,j,num,sudoku);
+        if(usedRow(i,num,sudoku)){
+            if(usedCol(j, num, sudoku)){
+                if(checkSquare(i,j,num,sudoku)){
+                    return true;
+                }
             }
         }
-        return end;
+        return false;
     }
     
     /**

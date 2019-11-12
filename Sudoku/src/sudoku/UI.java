@@ -34,6 +34,7 @@ public class UI {
         JTextField panes[][] = new JTextField[9][9];
         button_panel.add(new_sudoku);
         button_panel.add(solve_sudoku);
+        int z = 0;
 
         new_sudoku.addActionListener(new ActionListener() {
             @Override
@@ -41,9 +42,9 @@ public class UI {
                 sudoku = Sudoku.sudokuGenerator();
                 for (int i = 0; i < 9; i++) {
                     for (int j = 0; j < 9; j++) {
-                        if(sudoku[i][j] == 0){
+                        if (sudoku[i][j] == 0) {
                             panes[i][j].setText(null);
-                        }else{
+                        } else {
                             panes[i][j].setText(String.valueOf(sudoku[i][j]));
                         }
                     }
@@ -57,18 +58,19 @@ public class UI {
                 Sudoku.sudokuSolver9000(sudoku, 0, 0);
                 for (int i = 0; i < 9; i++) {
                     for (int j = 0; j < 9; j++) {
-                        if(sudoku[i][j] == 0){
+                        if (sudoku[i][j] == 0) {
                             panes[i][j].setText(null);
-                        }else{
+                        } else {
                             panes[i][j].setText(String.valueOf(sudoku[i][j]));
                         }
                     }
                 }
             }
         });
-        
-        for(int i = 0; i< 9; i++){
-            auxiliar_panel[i] = new JPanel(new GridLayout(3,3));
+
+        for (int i = 0; i < 9; i++) {
+            auxiliar_panel[i] = new JPanel(new GridLayout(3, 3));
+            auxiliar_panel[i].setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         }
         
         for (int i = 0; i < 9; i++) {
@@ -92,9 +94,9 @@ public class UI {
                             }
                         }
                         if (panes[row][col].getText().matches("[0-9]?\\d") || panes[row][col].getText().matches(null)) {
-                            if(Sudoku.checker(row, col, Integer.parseInt(panes[row][col].getText()), sudoku)){
+                            if (Sudoku.checker(row, col, Integer.parseInt(panes[row][col].getText()), sudoku)) {
                                 sudoku[row][col] = Integer.parseInt(panes[row][col].getText());
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(frame, "The number you tried to use isn't correct");
                             }
                         } else {
@@ -102,9 +104,25 @@ public class UI {
                         }
                     }
                 });
-                auxiliar_panel[i].add(panes[i][j]);
-                auxiliar_panel[i].setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
             }
+        }
+        for (int i = 0; i < 9; i++) {
+            if (i == 3) {
+                z = z + 3;
+            } else if (i == 6) {
+                z = z + 3;
+            }
+            for (int j = 0; j < 9; j++) {
+                if (j == 3) {
+                    z++;
+                } else if (j == 6) {
+                    z++;
+                }
+                auxiliar_panel[z].add(panes[i][j]);
+            }
+            z = z - 2;
+        }
+        for(int i = 0; i < 9; i++){
             sudoku_panel.add(auxiliar_panel[i]);
         }
         frame.add(sudoku_panel, BorderLayout.WEST);
